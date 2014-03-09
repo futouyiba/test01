@@ -21,9 +21,17 @@ function MainScene:onEnter()
             layer:setKeypadEnabled(true)
         end, 0.5)
     end
+
+
     cursor=display.newSprite("bgTile.png"):pos(display.cx,display.cy):addTo(self,-1,cursor)
-    mc=display.newSprite("3.png"):pos(display.cx,display.cy):addTo(self,0,mc)   
+    echo(cursor:getContentSize().width)
+    texiao=CCParticleSystemQuad:create("eff_fly_yellow.plist")
+    cursor:addChild(texiao)
+    mc=display.newScale9Sprite("3.png"):pos(display.cx,display.cy):addTo(self,0,mc)   
     mc:setTouchEnabled(true)
+    streak=CCMotionStreak:create(0.5, 1, 30, ccc3(255, 255, 255), "bgTile.png")
+    self:addChild(streak)
+    streak:setPosition(ccp(480, 320))
     mc:addTouchEventListener( function(event,x,y)
         if event=="began" then 
             mc:setScale(1.1)
@@ -33,14 +41,17 @@ function MainScene:onEnter()
         end
         if event=="moved"
             then cursor:pos(x,y)
+            streak:setPosition(ccp(x, y))
         end
 
         if event=="ended" then 
             mc:setScale(1.0)
             cursor:setZOrder(-1)
             cursor:pos(display.cx,display.cy)
+            streak:setPosition(ccp(480, 320))
         end
         echo(event)
+        echo(x,y)
        return true
     end)
 end
